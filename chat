@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Grammar Practice Prototype</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #ffffff;
+    }
+
+    .app {
+      width: 360px;
+      height: 640px;
+      background: #131313;
+      display: flex;
+      flex-direction: column;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .chat {
+      flex: 1;
+      padding: 12px;
+      overflow-y: auto;
+    }
+
+    .message {
+      background: #222222;
+      padding: 10px 12px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      font-size: 14px;
+      line-height: 1.4;
+      white-space: pre-line;
+    }
+
+    .message.user {
+      align-self: flex-end;
+      background: #8558FF;
+    }
+
+    .input-area {
+      display: flex;
+      padding: 10px;
+      background: #131313;
+      border-top: 1px solid #222;
+    }
+
+    .input-area input {
+      flex: 1;
+      background: #222222;
+      border: none;
+      border-radius: 10px;
+      padding: 10px;
+      color: #ffffff;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .input-area button {
+      margin-left: 8px;
+      background: #8558FF;
+      border: none;
+      border-radius: 10px;
+      padding: 0 14px;
+      color: #ffffff;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app">
+    <div class="chat" id="chat"></div>
+
+    <div class="input-area">
+      <input type="text" id="input" placeholder="Напиши сообщение…" />
+      <button id="send">Отправить</button>
+    </div>
+  </div>
+
+  <script>
+    const chat = document.getElementById("chat");
+    const input = document.getElementById("input");
+    const sendBtn = document.getElementById("send");
+
+    let step = 0;
+
+    function addMessage(text, sender = "bot") {
+      const msg = document.createElement("div");
+      msg.className = "message" + (sender === "user" ? " user" : "");
+      msg.textContent = text;
+      chat.appendChild(msg);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    // первое сообщение
+    addMessage(
+`Рад видеть тебя на практике! Давай потренируем твою грамматику.
+Я составлю для тебя полезные упражнения, а ты можешь задать им любую интересную тебе тему.
+
+Например, напиши мне «Игра престолов», «Олимпиада в Милане» или «Классические композиторы».
+Если подойдет нейтральная тема, напиши «Удиви меня».`
+    );
+
+    sendBtn.addEventListener("click", handleSend);
+    input.addEventListener("keypress", e => {
+      if (e.key === "Enter") handleSend();
+    });
+
+    function handleSend() {
+      if (!input.value.trim()) return;
+
+      addMessage(input.value, "user");
+      input.value = "";
+
+      if (step === 0) {
+        addMessage(
+`Отличная тема, давай начинать!
+Заполни пропуски в предложениях про сериал «Черное зеркало».
+Напиши глагол, выбрав нужную форму (Past Simple vs Present Perfect).
+
+The first episode of Black Mirror __________ (come out) in 2011.
+Many viewers __________ (feel) shocked after watching some episodes.
+The series __________ (show) how technology can affect our lives.
+In “Nosedive”, people __________ (rate) each other using an app.
+The show __________ (become) more popular since it moved to Netflix.
+Some episodes __________ (predict) real technological developments.
+In “San Junipero”, the main characters __________ (meet) in a virtual reality world.
+Charlie Brooker __________ (create) many disturbing stories about the future.`
+        );
+        step++;
+      } else if (step === 1) {
+        addMessage(
+`Супер, а вот правильные ответы на это упражнение!
+
+В предложении 4 корректнее будет написать “people rated”, так как нет указания на конкретное время, когда происходило действие.
+In “Nosedive”, people rated each other using an app.
+
+В предложении 8 лучше использовать Present Perfect, так как мы наблюдаем результат действия — созданные истории.
+Charlie Brooker has created many disturbing stories about the future.
+
+Со всеми остальными предложениями ты справился отлично!
+Хочешь потренироваться еще?`
+        );
+        step++;
+      }
+    }
+  </script>
+
+</body>
+</html>
